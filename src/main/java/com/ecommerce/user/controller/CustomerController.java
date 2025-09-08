@@ -1,12 +1,11 @@
 package com.ecommerce.user.controller;
 
-import com.ecommerce.user.dto.UserRequestDTO;
-import com.ecommerce.user.dto.UserResponseDTO;
-import com.ecommerce.user.service.UserService;
+import com.ecommerce.user.dto.CustomerRequestDTO;
+import com.ecommerce.user.dto.CustomerResponseDTO;
+import com.ecommerce.user.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,19 +16,20 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
 @Slf4j
-public class UserController {
+public class CustomerController {
 
-    private final UserService userService;
+    @Autowired
+    private final CustomerService customerService;
 //    private static Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @GetMapping
-    public ResponseEntity<List<UserResponseDTO>> getAllUsers(){
-        return new ResponseEntity<>(userService.fetchAllUsers(),
+    public ResponseEntity<List<CustomerResponseDTO>> getAllUsers(){
+        return new ResponseEntity<>(customerService.fetchAllCustomers(),
                 HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> getUser(@PathVariable String id){
+    public ResponseEntity<CustomerResponseDTO> getUser(@PathVariable String id){
         log.info("Request received for user: {}", id);
 
         log.trace("This is TRACE level - Very detailed logs");
@@ -38,21 +38,21 @@ public class UserController {
         log.warn("This is WARN level - Something might be wrong");
         log.error("This is ERROR level - Something failed");
 
-        return userService.fetchUser(id)
+        return customerService.fetchCustomer(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<String> createUser(@RequestBody UserRequestDTO userRequestDTO){
-        userService.addUser(userRequestDTO);
+    public ResponseEntity<String> createUser(@RequestBody CustomerRequestDTO customerRequestDTO){
+        customerService.addCustomer(customerRequestDTO);
         return ResponseEntity.ok("User added successfully");
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateUser(@PathVariable String id,
-                                             @RequestBody UserRequestDTO updateUserRequestDTO){
-        boolean updated = userService.updateUser(id, updateUserRequestDTO);
+                                             @RequestBody CustomerRequestDTO updateCustomerRequestDTO){
+        boolean updated = customerService.updateCustomer(id, updateCustomerRequestDTO);
         if (updated)
             return ResponseEntity.ok("User updated successfully");
         return ResponseEntity.notFound().build();

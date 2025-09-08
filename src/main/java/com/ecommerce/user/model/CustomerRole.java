@@ -1,5 +1,5 @@
 package com.ecommerce.user.model;
 
-public enum UserRole {
+public enum CustomerRole {
     CUSTOMER, ADMIN
 }
