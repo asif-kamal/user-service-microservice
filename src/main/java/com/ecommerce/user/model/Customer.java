@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
 @Entity
 public class Customer {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String keycloakId;
     private String firstName;
     private String lastName;
@@ -21,8 +22,8 @@ public class Customer {
     private String email;
     private String phone;
     private CustomerRole role = CustomerRole.CUSTOMER;
-    
-    @ManyToOne
+
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
 
