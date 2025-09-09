@@ -58,16 +58,30 @@ public class CustomerService {
         customer.setLastName(customerRequest.getLastName());
         customer.setEmail(customerRequest.getEmail());
         customer.setPhone(customerRequest.getPhone());
+
         if (customerRequest.getAddress() != null) {
-            Address address = new Address();
-            address.setStreet(customerRequest.getAddress().getStreet());
-            address.setState(customerRequest.getAddress().getState());
-            address.setZipcode(customerRequest.getAddress().getZipcode());
-            address.setCity(customerRequest.getAddress().getCity());
-            address.setCountry(customerRequest.getAddress().getCountry());
-            customer.setAddress(address);
+            Address existingAddress = customer.getAddress();
+
+            if (existingAddress != null) {
+                // Update existing address fields instead of creating new one
+                existingAddress.setStreet(customerRequest.getAddress().getStreet());
+                existingAddress.setState(customerRequest.getAddress().getState());
+                existingAddress.setZipcode(customerRequest.getAddress().getZipcode());
+                existingAddress.setCity(customerRequest.getAddress().getCity());
+                existingAddress.setCountry(customerRequest.getAddress().getCountry());
+            } else {
+                // Only create new address if customer doesn't have one
+                Address address = new Address();
+                address.setStreet(customerRequest.getAddress().getStreet());
+                address.setState(customerRequest.getAddress().getState());
+                address.setZipcode(customerRequest.getAddress().getZipcode());
+                address.setCity(customerRequest.getAddress().getCity());
+                address.setCountry(customerRequest.getAddress().getCountry());
+                customer.setAddress(address);
+            }
         }
     }
+
 
     private CustomerResponseDTO mapTocustomerResponseDTO(Customer customer){
         CustomerResponseDTO response = new CustomerResponseDTO();

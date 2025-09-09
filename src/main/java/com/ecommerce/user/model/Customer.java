@@ -23,7 +23,7 @@ public class Customer {
     private String phone;
     private CustomerRole role = CustomerRole.CUSTOMER;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "address_id")
     private Address address;
 
